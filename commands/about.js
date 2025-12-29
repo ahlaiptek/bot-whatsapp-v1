@@ -1,9 +1,9 @@
-const {dev, owners} = require("../bot.js")
+const bot = require("../bot.js")
 
 module.exports = {
     response: async ({message}, next) => {
-        console.log(dev, owners)
-        return `@${dev.split("@")[0]} - DEV\n@${owners[0].split("@")[0]} - OWNER`
+        console.log(bot)
+        return "Fixing"
     },
     options: {
         aliases: ["owner"],
