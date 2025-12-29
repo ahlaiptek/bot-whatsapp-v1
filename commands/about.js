@@ -2,6 +2,7 @@ const {dev, owners} = require("../bot")
 
 module.exports = {
     response: async ({message}, next) => {
+        console.log(dev, owners)
         return `@${dev.split("@")[0]} - DEV\n@${owners[0].split("@")[0]} - OWNER`
     },
     options: {
