@@ -1,5 +1,4 @@
 const fs = require("fs")
-const { inspect } = require("util")
 
 module.exports = {
     response: async ({message}, next) => {
@@ -19,6 +18,7 @@ module.exports = {
     },
     options: {
         description: "See your profile",
-        aliases: ["profil", "pf", "me"]
+        aliases: ["profil", "pf", "me"],
+        sectionName: "General Menu"
     }
 }
