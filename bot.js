@@ -11,6 +11,10 @@ const TypeData = ["profiles"]
 
 // StartUp
 
+bot.onReceive(/.+/, ({message}, next) => {
+    console.log(inspect(message))
+})
+
 bot.onReady(async () => {
     if(!fs.existsSync(dataPath)) {
         await fs.mkdirSync(dataPath)
