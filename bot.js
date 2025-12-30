@@ -1,10 +1,12 @@
 const bot = require("wachan")
 const {inspect} = require("util")
 const commands = require("wachan/commands")
+const fs = require("fs")
 require("dotenv").config()
 
 const owners = process.env.owner_id.split(",").map(x => getJid(x))
-const dev = getJid(process.env.dev_id)
+const dataPath = "./data/"
+const TypeData = ["profiles"]
 
 // Message
 bot.onReceive(/^>> (.+)$/si, async (ctx, next) => {
@@ -31,14 +33,24 @@ commands.fromFolder("commands")
 // Non message
 
 bot.onReady(async () => {
-    await bot.sendMessage(dev, "Ascy is Ready!")
+    if(!fs.existsSync(dataPath)) {
+        await fs.mkdirSync(dataPath)
+    }
+    for(let folder of TypeData) {
+        const path = dataPath + folder
+        if(!fs.existsSync(path)) {
+            await fs.mkdirSync(path, {recursive: true})
+        }
+    }
+
+    await bot.sendMessage(owners[0], "Ascy is Ready!")
 })
 
 function permission(message) {
     // const id = message.sender.id.endsWith("lid")? message.sender.id : message.sender.lid
 
     const id = message.toBaileys().key.senderPn || message.toBaileys().key.participantPn
-    return id == dev || owners.includes(id)
+    return owners.includes(id)
 }
 
 function permissionId(id) {
@@ -54,4 +66,4 @@ function getJid(id) {
 
 bot.start()
 
-module.exports = {permission, permissionId, owners, dev}
+module.exports = {permission, permissionId, bot, owners}
