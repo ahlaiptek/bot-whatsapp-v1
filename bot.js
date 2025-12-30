@@ -4,7 +4,6 @@ const commands = require("wachan/commands")
 require("dotenv").config()
 
 const owners = process.env.owner_id.split(",").map(x => getJid(x))
-const dev = getJid(process.env.dev_id)
 
 // Message
 bot.onReceive(/^>> (.+)$/si, async (ctx, next) => {
@@ -31,14 +30,14 @@ commands.fromFolder("commands")
 // Non message
 
 bot.onReady(async () => {
-    await bot.sendMessage(dev, "Ascy is Ready!")
+    await bot.sendMessage(owners[0], "Ascy is Ready!")
 })
 
 function permission(message) {
     // const id = message.sender.id.endsWith("lid")? message.sender.id : message.sender.lid
 
     const id = message.toBaileys().key.senderPn || message.toBaileys().key.participantPn
-    return id == dev || owners.includes(id)
+    return owners.includes(id)
 }
 
 function permissionId(id) {
@@ -54,4 +53,4 @@ function getJid(id) {
 
 bot.start()
 
-module.exports = {permission, permissionId}
+module.exports = {permission, permissionId, bot, owners}
