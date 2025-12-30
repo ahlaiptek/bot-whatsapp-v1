@@ -1,4 +1,5 @@
 const fs = require("fs")
+const {bot} = require("../bot")
 
 module.exports = {
     response: async ({message}, next) => {
@@ -14,7 +15,7 @@ module.exports = {
         } else {
             data = JSON.parse(await fs.readFileSync(path, "utf8"))
         }
-        return `User: ${data.name.endsWith("s.whatsapp.net")?data.name.split("@")[0]:data.name}\nAge: ${data.age?data.age:"Never been set"}`
+        const msg = await bot.waitForMessage((m) => m.sender.id === message.sender.id)
     },
     options: {
         description: "See your profile",
