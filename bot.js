@@ -2,13 +2,34 @@ const bot = require("wachan")
 const {inspect} = require("util")
 const commands = require("wachan/commands")
 const fs = require("fs")
+const { exec } = require("child_process")
 require("dotenv").config()
 
 const owners = process.env.owner_id.split(",").map(x => getJid(x))
 const dataPath = "./data/"
 const TypeData = ["profiles"]
 
-// Message
+// StartUp
+
+bot.onReady(async () => {
+    if(!fs.existsSync(dataPath)) {
+        await fs.mkdirSync(dataPath)
+    }
+    for(let folder of TypeData) {
+        const path = dataPath + folder
+        if(!fs.existsSync(path)) {
+            await fs.mkdirSync(path, {recursive: true})
+        }
+    }
+    
+    await bot.sendMessage(owners[0], "Ascy is Ready!")
+})
+
+commands.fromFolder("commands")
+
+// Commands
+
+// Eval
 bot.onReceive(/^>> (.+)$/si, async (ctx, next) => {
     const {message, captures} = ctx
     if(!permission(message)) return
@@ -28,24 +49,23 @@ bot.onReceive(/^>> (.+)$/si, async (ctx, next) => {
     }
 })
 
-commands.fromFolder("commands")
-
-// Non message
-
-bot.onReady(async () => {
-    if(!fs.existsSync(dataPath)) {
-        await fs.mkdirSync(dataPath)
-    }
-    for(let folder of TypeData) {
-        const path = dataPath + folder
-        if(!fs.existsSync(path)) {
-            await fs.mkdirSync(path, {recursive: true})
-        }
-    }
-
-    await bot.sendMessage(owners[0], "Ascy is Ready!")
+// Execute
+bot.onReceive(/^\$ (.+)$/si, async ({message, captures}) => {
+    if(!permission(message)) return
+    exec(captures[0], (error, stdout, stderr) => {
+        if(error) return message.reply("ERROR:\n" + error)
+        return message.reply(stdout)
+    })
 })
 
+// Restart
+commands.add("restart", async ({message}) => {
+    if(!permission(message)) return
+    await message.reply("Restarting...")
+    exec(`pm2 restart bot -- "restart mode"`)
+})
+
+// Functions
 function permission(message) {
     // const id = message.sender.id.endsWith("lid")? message.sender.id : message.sender.lid
 
@@ -55,7 +75,7 @@ function permission(message) {
 
 function permissionId(id) {
     const message = {
-            toBaileys: () => {return {key: {senderPn: getJid(id)}}} 
+        toBaileys: () => {return {key: {senderPn: getJid(id)}}} 
     }
     return permission(message)
 }
