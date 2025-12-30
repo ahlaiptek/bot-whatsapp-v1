@@ -21,6 +21,10 @@ bot.onReady(async () => {
             await fs.mkdirSync(path, {recursive: true})
         }
     }
+
+    for(let id of owners) {
+        console.log(permissionId(owner))
+    }
     
     await bot.sendMessage(owners[0], "Ascy is Ready!")
 })
