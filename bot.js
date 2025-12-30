@@ -31,8 +31,8 @@ bot.onReady(async () => {
         console.log(permissionId(id))
     }
     
-    if(process.argv?.slice(2).split("|")[0] === "restart mode") {
-        await bot.sendMessage(process.argv.slice(2).split("|")[1], "Restarted")
+    if(process.argv?.slice(2).length) {
+        await bot.sendMessage(process.argv.slice(2).join(""), "Restarted")
     } else {
         await bot.sendMessage(owners[0], "Ascy is Ready!")
     }
@@ -75,7 +75,7 @@ bot.onReceive(/^\$ (.+)$/si, async ({message, captures}) => {
 commands.add("restart", async ({message}) => {
     if(!permission(message)) return
     await message.reply("Restarting...")
-    exec(`pm2 restart bot -- "restart mode|${message.room}"`)
+    exec(`pm2 restart bot -- "${message.room}"`)
 })
 
 // Functions
