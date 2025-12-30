@@ -13,6 +13,7 @@ const TypeData = ["profiles"]
 
 bot.onReceive(/.+/, ({message}, next) => {
     console.log(inspect(message))
+    next()
 })
 
 bot.onReady(async () => {
