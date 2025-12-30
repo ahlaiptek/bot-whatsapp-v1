@@ -71,7 +71,7 @@ bot.onReceive(/^\$ (.+)$/si, async ({message, captures}) => {
 commands.add("restart", async ({message}) => {
     if(!permission(message)) return
     await message.reply("Restarting...")
-    exec(`pm2 restart bot -- "restart mode"`)
+    exec(`pm2 restart bot -- "restart mode|${message.room}`)
 })
 
 // Functions
