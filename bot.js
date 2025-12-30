@@ -80,7 +80,7 @@ function permission(message) {
 
 function permissionId(id) {
     const message = {
-        toBaileys: () => {return {key: {senderPn: getJid(id)}}} 
+        toBaileys: () => {return {key: {senderPn: id}}} 
     }
     return permission(message)
 }
