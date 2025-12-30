@@ -15,8 +15,10 @@ module.exports = {
         } else {
             data = JSON.parse(await fs.readFileSync(path, "utf8"))
         }
-        const msg = await bot.waitForMessage((m) => m.sender.id === message.sender.id).text
+        await message.reply("Send a text to change name!")
+        let msg = await bot.waitForMessage((m) => m.sender.id === message.sender.id && m.type === "text")
         if(!msg) return "Time to change your name is over"
+        msg = msg.text
         data.name = msg
         await fs.writeFileSync(path, JSON.stringify(data, null, 2))
         return "Successfully set your name to "+msg
