@@ -38,6 +38,10 @@ bot.onReady(async () => {
     }
 })
 
+bot.onError((error, ctx) => {
+    bot.sendMessage(owners[0], `${error.stack}\n\nMessage: ${inspect(ctx, {depth: 2})}`)
+})
+
 commands.fromFolder("commands")
 
 // Commands
