@@ -31,7 +31,11 @@ bot.onReady(async () => {
         console.log(permissionId(id))
     }
     
-    await bot.sendMessage(owners[0], "Ascy is Ready!")
+    if(process.argv?.slice(2).split("|")[0] === "restart mode") {
+        await bot.sendMessage(process.argv.slice(2).split("|")[0], "Restarted")
+    } else {
+        await bot.sendMessage(owners[0], "Ascy is Ready!")
+    }
 })
 
 commands.fromFolder("commands")
