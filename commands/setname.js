@@ -3,7 +3,7 @@ const {bot} = require("../bot")
 
 module.exports = {
     response: async ({message}, next) => {
-        const path = "./data/profiles/" + (message.toBaileys().key?.senderPn || message.toBaileys().key?.participantPn) + ".json"
+        const path = "./data/profiles/" + (message.toBaileys().key?.participantAlt || message.toBaileys().key?.remoteJidAlt) + ".json"
         let data
         if(!fs.existsSync(path)) {
             data = {
