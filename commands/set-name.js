@@ -20,14 +20,13 @@ module.exports = {
         let msg = await bot.waitForMessage((m) => m.sender.id === message.sender.id && m.type === "text", 60*10*10*10)
         if(!msg) return "Time to change your name is over"
         else if (msg.text.includes("@")) return "You can't add @ in your"
-        msg = msg.text
-        data.name = msg
+        data.name = msg.text
         await fs.writeFileSync(path, JSON.stringify(data, null, 2))
         return "Successfully set your name to "+msg
     },
     options: {
         description: "set your name",
-        aliases: ["name"],
+        aliases: ["name", "setname"],
         sectionName: "General Menu"
     }
 }
