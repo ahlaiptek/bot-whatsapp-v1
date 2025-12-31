@@ -1,5 +1,6 @@
 const fs = require("fs")
-const {bot} = require("../bot.js")
+const bot = require("../bot.js")
+const {inspect} = require("util")
 
 module.exports = {
     response: async ({message}, next) => {
