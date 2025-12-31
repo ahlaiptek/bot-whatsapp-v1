@@ -1,4 +1,6 @@
 const fs = require("fs")
+const {bot} = require("../bot.js")
+const {inspect} = require("util")
 
 module.exports = {
     response: async ({message}, next) => {
@@ -14,11 +16,17 @@ module.exports = {
         } else {
             data = JSON.parse(await fs.readFileSync(path, "utf8"))
         }
-        return `User: ${data.name?.endsWith("s.whatsapp.net")?data.name.split("@")[0]:data.name}\nAge: ${data.age?data.age:"Never been set"}`
+        await message.reply("Send a text to change name!")
+        let msg = await bot.waitForMessage((m) => m.sender.id === message.sender.id && m.type === "text", 60*10*10*10)
+        if(!msg) return "Time to change your name is over"
+        else if (msg.text.includes("@")) return "You can't add @ in your"
+        data.name = msg.text
+        await fs.writeFileSync(path, JSON.stringify(data, null, 2))
+        return "Successfully set your name to "+msg
     },
     options: {
-        description: "See your profile",
-        aliases: ["profil", "pf", "me"],
+        description: "set your name",
+        aliases: ["name", "setname"],
         sectionName: "General Menu"
     }
 }
