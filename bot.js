@@ -7,7 +7,7 @@ require("dotenv").config()
 
 const owners = process.env.owner_id.split(",").map(x => getJid(x))
 const dataPath = "./data/"
-const TypeData = ["profiles"]
+const dataType = ["profiles"]
 
 // StartUp
 
@@ -22,7 +22,7 @@ bot.onReady(async () => {
     if(!fs.existsSync(dataPath)) {
         await fs.mkdirSync(dataPath)
     }
-    for(let folder of TypeData) {
+    for(let folder of dataType) {
         const path = dataPath + folder
         if(!fs.existsSync(path)) {
             await fs.mkdirSync(path, {recursive: true})
@@ -104,4 +104,4 @@ function getJid(id) {
     return id + "@s.whatsapp.net"
 }
 
-bot.start({suppressBaileysLogs: false})
+bot.start({phoneNumber: process.env.bot_id})
